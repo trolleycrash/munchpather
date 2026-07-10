@@ -50,25 +50,31 @@ The same order is used for `classKeyAbility`, `getBackgroundBoostFreeSelection`,
 
 ## What converts reliably
 
-Character name, age, gender, deity; ancestry / class labels; level; ability
-boosts and key ability; money (coins); languages; weapons, worn armour,
-equipment, and containers; background (validated or constructed as
-`BACKGROUND_<name>`); class/ancestry/skill feats (validated or constructed).
+Character name, level, XP; age, gender, deity; ancestry / class labels; ability
+boosts and key ability; ancestry free boost and background limited/free boost
+selections; money (coins); languages; weapons, worn + stowed armour, equipment,
+and containers; background (validated or constructed as `BACKGROUND_<name>`);
+class/ancestry/skill feats (validated or constructed); notes (from biography).
+
+## What converts best-effort
+
+Spells (`hashMapPlayerSpells`) are mapped from the class repertoire/prepared
+list, keyed `<Class>&<rank>&<index>` (cantrips at rank 0); focus spells are
+excluded (Pathbuilder ties them to feats). Verify spell ranks after import.
 
 ## Known limitations (finish in the Pathbuilder app)
 
-These depend on undocumented Pathbuilder internals not derivable from the Foundry
-export, and are left empty or approximate:
+These are left empty because they are not reliably derivable from the Foundry
+export (Foundry stores only final state, not the per-choice history Pathbuilder
+needs):
 
-1. Spells (`hashMapPlayerSpells`).
-2. Per-level skill increases and trained-skill choices.
-3. Class special selections (eidolon type, doctrine, divine font, etc.).
-4. **Feat slot placement.** Feat *ids* are mapped, but Pathbuilder's exact slot
-   names (`"Class Feat 4"`, etc.) are approximated from each feat's level; the
-   converter reports every constructed id and any slot collisions so you can
+1. Per-level skill increases and trained-skill choices (Foundry keeps only final
+   skill ranks, not which skill was chosen at which level).
+2. Class special selections (eidolon type, doctrine, divine font, etc.).
+3. **Feat slot placement.** Feat *ids* are mapped, but Pathbuilder's exact slot
+   names (`"Class Feat 4"`, etc.) are approximated from each feat's taken level;
+   the converter reports every constructed id and any slot collisions so you can
    verify placement after import.
-5. Background boost selections (`getBackgroundBoostFreeSelection` etc.) default
-   to `0`.
 
 The converter prints a report of what matched the catalogue versus what was
 constructed, so unmatched items are never hidden.

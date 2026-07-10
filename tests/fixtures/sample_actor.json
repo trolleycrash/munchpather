@@ -38,6 +38,12 @@
     { "type": "feat", "_id": "f3", "name": "Halfling Luck", "system": { "category": "ancestry", "level": { "value": 1, "taken": 1 } } },
     { "type": "feat", "_id": "f4", "name": "Keen Eyes", "system": { "category": "ancestryfeature", "level": { "value": 1 } } },
 
+    { "type": "spellcastingEntry", "_id": "sc1", "name": "Summoner", "system": { "prepared": { "value": "spontaneous" }, "tradition": { "value": "arcane" } } },
+    { "type": "spellcastingEntry", "_id": "sc2", "name": "Focus", "system": { "prepared": { "value": "focus" } } },
+    { "type": "spell", "_id": "sp1", "name": "Electric Arc", "system": { "level": { "value": 1 }, "traits": { "value": ["cantrip"] }, "location": { "value": "sc1" } } },
+    { "type": "spell", "_id": "sp2", "name": "Fear", "system": { "level": { "value": 1 }, "traits": { "value": [] }, "location": { "value": "sc1" } } },
+    { "type": "spell", "_id": "sp3", "name": "Boost Eidolon", "system": { "level": { "value": 1 }, "traits": { "value": ["cantrip"] }, "location": { "value": "sc2" } } },
+
     { "type": "armor", "_id": "arm1", "name": "Explorer's Clothing", "system": { "equipped": { "carryType": "worn", "inSlot": true } } },
     { "type": "armor", "_id": "arm2", "name": "Leather Armor", "system": { "equipped": { "carryType": "worn", "inSlot": false } } },
 

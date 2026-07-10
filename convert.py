@@ -292,6 +292,51 @@ def build_background_boosts(items: list[dict]) -> tuple[int, int]:
     return limited, free
 
 
+# --- Spells ------------------------------------------------------------------
+
+# Spellcasting entry kinds that hold a normal repertoire/prepared list. Focus,
+# innate, ritual, and item spells are handled elsewhere by Pathbuilder.
+_SPELL_LIST_KINDS = {"spontaneous", "prepared"}
+
+
+def build_spells(items: list[dict], class_name: str) -> dict[str, dict]:
+    """Build hashMapPlayerSpells from the class spell list.
+
+    Keys are ``<Class>&<rank>&<index>`` (rank 0 = cantrips); values are
+    ``{spellList, spellName, heighten}``. Only spontaneous/prepared entries are
+    included; focus spells are excluded (Pathbuilder ties them to feats).
+    """
+    list_entry_ids = {
+        item["_id"]
+        for item in items
+        if item.get("type") == "spellcastingEntry"
+        and item.get("system", {}).get("prepared", {}).get("value") in _SPELL_LIST_KINDS
+    }
+    if not list_entry_ids:
+        return {}
+
+    by_rank: dict[int, list[str]] = {}
+    for item in items:
+        if item.get("type") != "spell":
+            continue
+        system = item.get("system", {})
+        if system.get("location", {}).get("value") not in list_entry_ids:
+            continue
+        traits = system.get("traits", {}).get("value", [])
+        rank = 0 if "cantrip" in traits else int(system.get("level", {}).get("value", 1) or 1)
+        by_rank.setdefault(rank, []).append(item["name"])
+
+    spells: dict[str, dict] = {}
+    for rank, names in by_rank.items():
+        for index, name in enumerate(names):
+            spells[f"{class_name}&{rank}&{index}"] = {
+                "spellList": 1,
+                "spellName": name,
+                "heighten": 0,
+            }
+    return spells
+
+
 # --- Reference tables --------------------------------------------------------
 
 def load_tables(data_dir: Path = DATA_DIR) -> tuple[dict, list]:
@@ -378,7 +423,7 @@ def build_save(actor: dict, tables: tuple[dict, list] | None = None) -> tuple[di
     backstory = system.get("details", {}).get("biography", {}).get("backstory", "") or ""
 
     save = {
-        "hashMapPlayerSpells": {},
+        "hashMapPlayerSpells": build_spells(items, class_name),
         "webID": "",  # filled by build_pbex
         "characterName": actor.get("name", ""),
         "characterLevel": _character_level(actor),
@@ -420,10 +465,15 @@ def build_save(actor: dict, tables: tuple[dict, list] | None = None) -> tuple[di
     if backstory:
         save["notes"] = backstory
 
+    if save["hashMapPlayerSpells"]:
+        report["warnings"].append(
+            "Spells were mapped best-effort (repertoire/prepared list only; focus "
+            "spells excluded). Verify spell ranks in the Pathbuilder app."
+        )
     report["warnings"].append(
-        "Spells, per-level skill increases, class special selections, and precise "
-        "feat slot placement are not derivable from the Foundry export; finish "
-        "these in the Pathbuilder app after importing."
+        "Per-level skill increases, class special selections, and precise feat "
+        "slot placement are not derivable from the Foundry export; finish these "
+        "in the Pathbuilder app after importing."
     )
     return save, report
 
@@ -545,7 +595,8 @@ def _print_report(report: dict, save: dict) -> None:
         print(f"    ! constructed (verify in app): {f['id']}  [{f['slot']}]")
     for c in report.get("collisions", []):
         print(f"    ! feat slot collision (place by hand): {c['id']}  wanted [{c['slot']}]")
-    print("  NOTE: spells, skill increases, and class special selections were left "
+    print(f"  Spells mapped: {len(save['hashMapPlayerSpells'])} (repertoire; focus excluded)")
+    print("  NOTE: per-level skill increases and class special selections were left "
           "empty; complete them in Pathbuilder after import.")
 
 

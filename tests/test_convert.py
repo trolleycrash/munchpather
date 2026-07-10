@@ -366,6 +366,28 @@ class TestNotes:
         assert save.get("notes", "") == ""
 
 
+class TestSpells:
+    def test_cantrips_are_rank_zero(self, foundry_actor):
+        save, _ = convert.build_save(foundry_actor)
+        spells = save["hashMapPlayerSpells"]
+        assert spells["Summoner&0&0"] == {
+            "spellList": 1, "spellName": "Electric Arc", "heighten": 0
+        }
+
+    def test_leveled_spells_keyed_by_rank(self, foundry_actor):
+        spells = convert.build_save(foundry_actor)[0]["hashMapPlayerSpells"]
+        assert spells["Summoner&1&0"]["spellName"] == "Fear"
+
+    def test_focus_spells_are_excluded(self, foundry_actor):
+        spells = convert.build_save(foundry_actor)[0]["hashMapPlayerSpells"]
+        assert all(v["spellName"] != "Boost Eidolon" for v in spells.values())
+
+    def test_no_spellcasting_leaves_empty(self):
+        actor = {"name": "X", "items": [], "system": {"details": {"level": {"value": 1}}}}
+        save, _ = convert.build_save(actor, tables=({}, []))
+        assert save["hashMapPlayerSpells"] == {}
+
+
 class TestShape:
     def test_every_sample_key_present_with_same_type(self, foundry_actor, sample_inner_save):
         save, _ = convert.build_save(foundry_actor)
