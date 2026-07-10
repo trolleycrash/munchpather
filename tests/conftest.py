@@ -1,13 +1,18 @@
-"""Shared fixtures. The repo's real data files are the test fixtures."""
+"""Shared fixtures.
+
+The fixtures are synthetic (no real character data): ``sample_actor.json`` is a
+fabricated Foundry PF2e actor and ``sample.pbex`` encodes only the Pathbuilder
+save schema. Both live in tests/fixtures/.
+"""
 from __future__ import annotations
 
-import glob
 import json
 from pathlib import Path
 
 import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
 
 
 @pytest.fixture(scope="session")
@@ -17,14 +22,12 @@ def repo_root() -> Path:
 
 @pytest.fixture(scope="session")
 def foundry_actor() -> dict:
-    (path,) = glob.glob(str(ROOT / "fvtt-Actor-*.json"))
-    return json.loads(Path(path).read_text())
+    return json.loads((FIXTURES / "sample_actor.json").read_text())
 
 
 @pytest.fixture(scope="session")
 def sample_pbex() -> dict:
-    (path,) = glob.glob(str(ROOT / "pathbuilderexport*.pbex"))
-    return json.loads(Path(path).read_text())
+    return json.loads((FIXTURES / "sample.pbex").read_text())
 
 
 @pytest.fixture(scope="session")

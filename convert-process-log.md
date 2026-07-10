@@ -5,11 +5,13 @@ Shadow document describing how the converter was developed and why. Companion to
 
 ## Data sources
 
-1. `fvtt-Actor-merrit-ashwillow-oVDYiUS35IjAqalh.json`: a real Foundry PF2e
-   actor export (level-2 Halfling Summoner). The input format.
-2. `pathbuilderexport (1).pbex`: a real Pathbuilder backup of a different
-   character ("Unpaste Toothtabs", a level-1 Elf Cleric). Used only as a format
-   reference and to pin output shape/types.
+1. A real Foundry PF2e actor export (a level-2 Halfling Summoner). The input
+   format. The repository ships a synthetic stand-in at
+   `tests/fixtures/sample_actor.json`; the real character sheet is not included.
+2. A real Pathbuilder backup (`.pbex`) of a throwaway character, used only as a
+   format reference and to pin output shape/types. The repository ships a
+   synthetic stand-in at `tests/fixtures/sample.pbex` that encodes just the save
+   schema; the real backup is not included.
 3. The Pathbuilder web app JS bundle (`Pathbuilder2eWebRemastered108b.js`,
    3.9 MB, compiled Kotlin/JS). Source of the internal id tables. This is
    Pathbuilder's proprietary source and is not included in the repository.
@@ -21,7 +23,7 @@ Shadow document describing how the converter was developed and why. Companion to
 2. The inner character save uses proprietary internal ids. By diffing the sample
    save against the Foundry actor:
    - Ability boosts are integer indices. Confirmed **STR=0…CHA=5** two ways: the
-     sample Cleric's `classKeyAbility=4`=WIS, and Merrit's level-1 boosts
+     sample Cleric's `classKeyAbility=4`=WIS, and a Halfling Summoner's level-1 boosts
      `["int","dex","cha","con"]` correspond to `[3,1,5,2]`.
    - Ids follow `PREFIX_Display Name` (`SUMMONER_Reinforce Eidolon`,
      `GENERAL_Battle Medicine`, `BACKGROUND_Scout`).

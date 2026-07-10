@@ -9,7 +9,7 @@ never exports back to it; this fills that gap.
 
 ```bash
 # Convert an actor (the reference tables in data/ are already committed).
-python3 convert.py fvtt-Actor-merrit-ashwillow-oVDYiUS35IjAqalh.json -o merrit.pbex
+python3 convert.py fvtt-Actor-YourCharacter.json -o character.pbex
 ```
 
 The `data/` tables are checked in, so conversion works out of the box. To
@@ -21,7 +21,7 @@ Pathbuilder's proprietary source); save it from your browser and run:
 python3 extract_pathbuilder_tables.py path/to/Pathbuilder2eWebRemastered108b.js
 ```
 
-Then in Pathbuilder: open the backup/restore screen and import `merrit.pbex`.
+Then in Pathbuilder: open the backup/restore screen and import `character.pbex`.
 
 ## How it works
 
@@ -79,6 +79,6 @@ constructed, so unmatched items are never hidden.
 python3 -m pytest
 ```
 
-The repo's real `fvtt-Actor-*.json` and `pathbuilderexport*.pbex` are the test
-fixtures; the suite includes a shape check that pins the output against every key
-in a real Pathbuilder save.
+Synthetic fixtures live in `tests/fixtures/` (`sample_actor.json` and
+`sample.pbex`, which encodes the Pathbuilder save schema). The suite includes a
+shape check that pins the converter output against every key in that schema.

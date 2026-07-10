@@ -1,0 +1,42 @@
+{
+  "name": "Test Summoner",
+  "type": "character",
+  "system": {
+    "details": {
+      "level": { "value": 2 },
+      "keyability": { "value": "cha" },
+      "age": { "value": "20" },
+      "gender": { "value": "Male" },
+      "languages": { "value": ["draconic", "elven", "fey"] }
+    },
+    "build": {
+      "attributes": {
+        "boosts": { "1": ["int", "dex", "cha", "con"] }
+      }
+    }
+  },
+  "items": [
+    { "type": "ancestry", "_id": "anc1", "name": "Halfling", "system": { "slug": "halfling" } },
+    { "type": "heritage", "_id": "her1", "name": "Observant Halfling", "system": { "slug": "observant-halfling" } },
+    { "type": "class", "_id": "cls1", "name": "Summoner", "system": { "slug": "summoner" } },
+    { "type": "background", "_id": "bg1", "name": "Scholar of the Ancients", "system": { "slug": "scholar-of-the-ancients" } },
+    { "type": "deity", "_id": "dei1", "name": "Irori", "system": { "slug": "irori" } },
+
+    { "type": "feat", "_id": "f1", "name": "Reinforce Eidolon", "system": { "category": "class", "level": { "value": 2, "taken": 2 } } },
+    { "type": "feat", "_id": "f2", "name": "Battle Medicine", "system": { "category": "skill", "level": { "value": 1, "taken": 2 } } },
+    { "type": "feat", "_id": "f3", "name": "Halfling Luck", "system": { "category": "ancestry", "level": { "value": 1, "taken": 1 } } },
+    { "type": "feat", "_id": "f4", "name": "Keen Eyes", "system": { "category": "ancestryfeature", "level": { "value": 1 } } },
+
+    { "type": "armor", "_id": "arm1", "name": "Explorer's Clothing", "system": { "equipped": { "carryType": "worn", "inSlot": true } } },
+    { "type": "armor", "_id": "arm2", "name": "Leather Armor", "system": { "equipped": { "carryType": "worn", "inSlot": false } } },
+
+    { "type": "weapon", "_id": "wpn1", "name": "Dagger", "system": { "quantity": 1, "containerId": null, "equipped": { "carryType": "held" } } },
+
+    { "type": "backpack", "_id": "bag1", "name": "Backpack", "system": { "containerId": null, "bulk": { "ignored": 2 } } },
+    { "type": "equipment", "_id": "eq1", "name": "Bedroll", "system": { "quantity": 1, "containerId": "bag1", "equipped": { "carryType": "stowed" } } },
+    { "type": "consumable", "_id": "con1", "name": "Torch", "system": { "quantity": 5, "containerId": "bag1", "equipped": { "carryType": "stowed" } } },
+
+    { "type": "treasure", "_id": "gp", "name": "Gold Pieces", "system": { "stackGroup": "coins", "quantity": 12, "price": { "value": { "gp": 1 } } } },
+    { "type": "treasure", "_id": "sp", "name": "Silver Pieces", "system": { "stackGroup": "coins", "quantity": 53, "price": { "value": { "sp": 1 } } } }
+  ]
+}

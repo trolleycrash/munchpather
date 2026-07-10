@@ -19,7 +19,7 @@ class TestAbilityIndex:
         assert convert.ability_to_index("CHA") == 5
 
     def test_boost_list_conversion(self):
-        # Merrit's level-1 boosts from system.build.attributes.boosts["1"].
+        # A level-1 boost list from system.build.attributes.boosts["1"].
         assert convert.boosts_to_indices(["int", "dex", "cha", "con"]) == [3, 1, 5, 2]
 
     def test_empty_boosts(self):
@@ -34,7 +34,7 @@ class TestAbilityIndex:
 class TestMoney:
     def test_sums_coins_by_denomination(self, foundry_actor):
         coins = convert.extract_coins(foundry_actor["items"])
-        # Merrit: 12 gp, 53 sp, 0 cp, 0 pp.
+        # Sample actor: 12 gp, 53 sp, 0 cp, 0 pp.
         assert coins["gold"] == 12
         assert coins["silver"] == 53
         assert coins["copper"] == 0
@@ -150,7 +150,7 @@ class TestGear:
         equipment = convert.build_equipment(self._items())
         assert {"name": "Bedroll", "inContainerID": "BAG1"} in equipment
         assert {"name": "Chalk", "quantity": 10, "inContainerID": "BAG1"} in equipment
-        # weapons/armor/backpacks are not general equipment entries
+        # weapons and armor are not equipment entries (they have their own lists)
         assert all(e["name"] != "Dagger" for e in equipment)
 
     def test_weapons_carry_stowed_flag(self):
@@ -205,7 +205,7 @@ class TestGear:
 class TestKeyFields:
     def test_identity_and_stats(self, foundry_actor):
         save, _report = convert.build_save(foundry_actor)
-        assert save["characterName"] == "Merrit Ashwillow"
+        assert save["characterName"] == "Test Summoner"
         assert save["ancestry"] == "Halfling"
         assert save["className"] == "Summoner"
         assert save["deity"] == "Irori"
@@ -299,13 +299,13 @@ class TestWrapper:
         # saves value is a JSON string that decodes to the inner save
         (raw,) = pbex["saves"].values()
         inner = json.loads(raw)
-        assert inner["characterName"] == "Merrit Ashwillow"
+        assert inner["characterName"] == "Test Summoner"
         assert "fixed-id" in pbex["saves"]
 
     def test_saveids_metadata(self, foundry_actor):
         pbex = convert.build_pbex(foundry_actor, web_id="fixed-id", timestamp=123)
         meta = json.loads(pbex["saveIDs"][0])
-        assert meta["characterName"] == "Merrit Ashwillow"
+        assert meta["characterName"] == "Test Summoner"
         assert meta["classLevel"] == "Halfling Summoner 2"
         assert meta["webID"] == "fixed-id"
         assert meta["timestamp"] == 123

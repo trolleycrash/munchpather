@@ -3,5 +3,5 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# Generated converter output
-merrit.pbex
+# Generated converter output (root-level .pbex; tests/fixtures/*.pbex stays tracked)
+/*.pbex
