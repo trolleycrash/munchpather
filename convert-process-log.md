@@ -47,12 +47,15 @@ Shadow document describing how the converter was developed and why. Companion to
    so this should be safe.
 3. Worn armour = the armour item with `system.equipped.inSlot == true`; other
    armour items are carried, not worn.
-4. Feat slot numbers approximate Pathbuilder's scheme using each feat's
-   `system.level.value`. Foundry sometimes records a feat's minimum level rather
-   than the level taken, so slot placement can be wrong and is flagged in the
-   report. Left for a second pass after the first real import.
+4. Feat slot numbers approximate Pathbuilder's scheme using each feat's taken
+   level (`system.level.taken`, falling back to `value`). Multiple feats can
+   still collide on one slot (e.g. archetype feats Foundry only tags as
+   `class`); collisions are reported rather than silently dropped.
 5. Platinum is omitted when zero (the sample omits it); coins map gp/sp/cp
    directly.
+6. Spells are mapped from spontaneous/prepared spellcasting entries only; focus
+   spells are excluded because Pathbuilder ties them to feats. Verified against
+   the real actor's repertoire but not against a fully-built Summoner export.
 
 ## Development approach (TDD)
 
@@ -63,7 +66,10 @@ check asserting every key in a real sample save is present with the same type.
 
 ## Left for the user / future work
 
-Spells, per-level skill increases, class special selections, and precise feat
-slots are best-effort/empty. The cleanest way to sharpen these is to export the
-*same* character from Pathbuilder, add it as a fixture, diff against our output,
-and fold corrections back into the tables and tests.
+Per-level skill increases, trained-skill choices, and class special selections
+are left empty: Foundry stores only final skill ranks (not which skill was
+chosen or increased at which level), so these are not reliably derivable and a
+guess would produce a wrong character on import. Spells are mapped best-effort
+(repertoire only). The cleanest way to sharpen the remaining fields is to build
+the *same* character fully in Pathbuilder, export it, add it as a fixture, and
+diff against our output.
