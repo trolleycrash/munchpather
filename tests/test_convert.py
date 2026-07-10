@@ -336,6 +336,36 @@ class TestLevelAndXp:
         assert save["characterLevel"] == 1
 
 
+class TestBoostSelections:
+    def test_ancestry_free_boost_from_item(self, foundry_actor):
+        # Only the free ancestry boost (>1 option) is recorded, keyed sequentially.
+        save, _ = convert.build_save(foundry_actor)
+        assert save["hashMapAncestryFreeBoostSelections"] == {"0": 3}  # int
+
+    def test_background_limited_and_free_boosts(self, foundry_actor):
+        save, _ = convert.build_save(foundry_actor)
+        assert save["backgroundBoostLimitedSelection"] == 3  # int (2-option boost)
+        assert save["getBackgroundBoostFreeSelection"] == 5  # cha (free boost)
+
+    def test_no_boost_items_leaves_defaults(self):
+        actor = {"name": "X", "items": [], "system": {"details": {"level": {"value": 1}}}}
+        save, _ = convert.build_save(actor, tables=({}, []))
+        assert save["hashMapAncestryFreeBoostSelections"] == {}
+        assert save["backgroundBoostLimitedSelection"] == 0
+        assert save["getBackgroundBoostFreeSelection"] == 0
+
+
+class TestNotes:
+    def test_backstory_carried_to_notes(self, foundry_actor):
+        save, _ = convert.build_save(foundry_actor)
+        assert "wandering scholar" in save["notes"]
+
+    def test_notes_absent_when_no_biography(self):
+        actor = {"name": "X", "items": [], "system": {"details": {"level": {"value": 1}}}}
+        save, _ = convert.build_save(actor, tables=({}, []))
+        assert save.get("notes", "") == ""
+
+
 class TestShape:
     def test_every_sample_key_present_with_same_type(self, foundry_actor, sample_inner_save):
         save, _ = convert.build_save(foundry_actor)

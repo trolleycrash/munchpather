@@ -8,7 +8,8 @@
       "keyability": { "value": "cha" },
       "age": { "value": "20" },
       "gender": { "value": "Male" },
-      "languages": { "value": ["draconic", "elven", "fey"] }
+      "languages": { "value": ["draconic", "elven", "fey"] },
+      "biography": { "backstory": "A wandering scholar of lost lore." }
     },
     "build": {
       "attributes": {
@@ -17,10 +18,19 @@
     }
   },
   "items": [
-    { "type": "ancestry", "_id": "anc1", "name": "Halfling", "system": { "slug": "halfling" } },
+    { "type": "ancestry", "_id": "anc1", "name": "Halfling", "system": { "slug": "halfling",
+      "boosts": {
+        "0": { "value": ["dex"], "selected": "dex" },
+        "1": { "value": ["wis"], "selected": "wis" },
+        "2": { "value": ["str", "dex", "con", "int", "wis", "cha"], "selected": "int" }
+      } } },
     { "type": "heritage", "_id": "her1", "name": "Observant Halfling", "system": { "slug": "observant-halfling" } },
     { "type": "class", "_id": "cls1", "name": "Summoner", "system": { "slug": "summoner" } },
-    { "type": "background", "_id": "bg1", "name": "Scholar of the Ancients", "system": { "slug": "scholar-of-the-ancients" } },
+    { "type": "background", "_id": "bg1", "name": "Scholar of the Ancients", "system": { "slug": "scholar-of-the-ancients",
+      "boosts": {
+        "0": { "value": ["cha", "int"], "selected": "int" },
+        "1": { "value": ["str", "dex", "con", "int", "wis", "cha"], "selected": "cha" }
+      } } },
     { "type": "deity", "_id": "dei1", "name": "Irori", "system": { "slug": "irori" } },
 
     { "type": "feat", "_id": "f1", "name": "Reinforce Eidolon", "system": { "category": "class", "level": { "value": 2, "taken": 2 } } },

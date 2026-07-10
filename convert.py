@@ -237,6 +237,61 @@ def build_stowed_armor(items: list[dict]) -> list[dict]:
     return stowed
 
 
+# --- Ability boost selections (ancestry / background) ------------------------
+
+def _boost_index(entry: dict) -> int | None:
+    selected = entry.get("selected")
+    if isinstance(selected, str) and selected.lower() in ABILITY_ORDER:
+        return ability_to_index(selected)
+    return None
+
+
+def build_ancestry_free_boosts(items: list[dict]) -> dict[str, int]:
+    """Record the player-chosen (free) ancestry boosts.
+
+    Foundry stores each ancestry boost as ``{value: [options], selected}``; only
+    entries with more than one option are player choices. Pathbuilder keys them
+    sequentially: ``{"0": <abilityIndex>, ...}``.
+    """
+    ancestry = _first_item(items, "ancestry")
+    if not ancestry:
+        return {}
+    boosts = ancestry.get("system", {}).get("boosts", {})
+    result: dict[str, int] = {}
+    n = 0
+    for key in sorted(boosts, key=lambda k: int(k) if k.isdigit() else k):
+        entry = boosts[key]
+        if len(entry.get("value", [])) > 1:
+            idx = _boost_index(entry)
+            if idx is not None:
+                result[str(n)] = idx
+                n += 1
+    return result
+
+
+def build_background_boosts(items: list[dict]) -> tuple[int, int]:
+    """Return (limited, free) background boost ability indices.
+
+    A background grants one limited boost (a choice between two attributes) and
+    one free boost (any attribute). Defaults to (0, 0) when not derivable.
+    """
+    background = _first_item(items, "background")
+    limited = free = 0
+    if not background:
+        return limited, free
+    boosts = background.get("system", {}).get("boosts", {})
+    for entry in boosts.values():
+        options = entry.get("value", [])
+        idx = _boost_index(entry)
+        if idx is None:
+            continue
+        if len(options) >= 6:
+            free = idx
+        elif len(options) >= 2:
+            limited = idx
+    return limited, free
+
+
 # --- Reference tables --------------------------------------------------------
 
 def load_tables(data_dir: Path = DATA_DIR) -> tuple[dict, list]:
@@ -319,6 +374,8 @@ def build_save(actor: dict, tables: tuple[dict, list] | None = None) -> tuple[di
     ]
 
     xp = system.get("details", {}).get("xp", {}).get("value", 0) or 0
+    bg_limited, bg_free = build_background_boosts(items)
+    backstory = system.get("details", {}).get("biography", {}).get("backstory", "") or ""
 
     save = {
         "hashMapPlayerSpells": {},
@@ -336,9 +393,9 @@ def build_save(actor: dict, tables: tuple[dict, list] | None = None) -> tuple[di
         "gold": coins["gold"],
         "silver": coins["silver"],
         "copper": coins["copper"],
-        "hashMapAncestryFreeBoostSelections": {},
-        "backgroundBoostLimitedSelection": 0,
-        "getBackgroundBoostFreeSelection": 0,
+        "hashMapAncestryFreeBoostSelections": build_ancestry_free_boosts(items),
+        "backgroundBoostLimitedSelection": bg_limited,
+        "getBackgroundBoostFreeSelection": bg_free,
         "classKeyAbility": ability_to_index(key_ability),
         "hashMapFeatSelections": feat_selections,
         "hashMapSpecialSelections": {},
@@ -360,6 +417,8 @@ def build_save(actor: dict, tables: tuple[dict, list] | None = None) -> tuple[di
     }
     if coins["platinum"]:
         save["platinum"] = coins["platinum"]
+    if backstory:
+        save["notes"] = backstory
 
     report["warnings"].append(
         "Spells, per-level skill increases, class special selections, and precise "
