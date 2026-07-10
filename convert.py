@@ -318,10 +318,14 @@ def build_save(actor: dict, tables: tuple[dict, list] | None = None) -> tuple[di
         for lang in system.get("details", {}).get("languages", {}).get("value", [])
     ]
 
+    xp = system.get("details", {}).get("xp", {}).get("value", 0) or 0
+
     save = {
         "hashMapPlayerSpells": {},
         "webID": "",  # filled by build_pbex
         "characterName": actor.get("name", ""),
+        "characterLevel": _character_level(actor),
+        "experiencePoints": int(xp),
         "age": _detail(actor, "age"),
         "deity": deity_item["name"] if deity_item else _detail(actor, "deity"),
         "gender": _detail(actor, "gender"),
@@ -438,7 +442,10 @@ def _character_level(actor: dict) -> int:
 def wrap_pbex(save: dict, actor: dict, web_id: str, timestamp: int) -> dict:
     """Wrap an already-built inner save in the Pathbuilder .pbex backup envelope."""
     save = {**save, "webID": web_id}
-    class_level = f"{save['ancestry']} {save['className']} {_character_level(actor)}".strip()
+    # Derive the index level from the save itself so the list and the main window
+    # can never disagree.
+    level = save.get("characterLevel", _character_level(actor))
+    class_level = f"{save['ancestry']} {save['className']} {level}".strip()
     meta = {
         "characterName": save["characterName"],
         "classLevel": class_level,

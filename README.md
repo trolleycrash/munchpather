@@ -80,5 +80,20 @@ python3 -m pytest
 ```
 
 Synthetic fixtures live in `tests/fixtures/` (`sample_actor.json` and
-`sample.pbex`, which encodes the Pathbuilder save schema). The suite includes a
-shape check that pins the converter output against every key in that schema.
+`sample.pbex`, which encodes the Pathbuilder save schema). No real character
+data is committed.
+
+The suite includes an import-detail contract (`tests/test_contract.py`) that
+validates the converter output against the real Pathbuilder format:
+
+1. every emitted field is a known Pathbuilder save field, with a type matching
+   what real exports use (`tests/fixtures/pbex_schema.json`);
+2. the envelope is self-consistent (webID agreement across saves/saveIDs/inner,
+   index level equals `characterLevel`);
+3. value invariants hold (ability-boost indices 0..5, feat ids are `PREFIX_Name`,
+   coins are non-negative ints);
+4. cross-references resolve (`inContainerID` points at a real container).
+
+`pbex_schema.json` is format metadata (field names and JSON types, no character
+data). Regenerate it from your own exports with
+`tools/generate_pbex_schema.py <export.pbex ...> --bundle pb.js`.

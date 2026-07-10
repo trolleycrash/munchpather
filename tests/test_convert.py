@@ -311,6 +311,31 @@ class TestWrapper:
         assert meta["timestamp"] == 123
 
 
+class TestLevelAndXp:
+    def test_inner_save_carries_character_level(self, foundry_actor):
+        save, _ = convert.build_save(foundry_actor)
+        assert save["characterLevel"] == 2
+
+    def test_inner_save_carries_experience_points(self, foundry_actor):
+        save, _ = convert.build_save(foundry_actor)
+        assert save["experiencePoints"] == 750
+
+    def test_index_level_matches_inner_level(self, foundry_actor):
+        # The saveIDs index string and the inner save must agree on level, so
+        # Pathbuilder's list and the main window show the same number.
+        pbex = convert.build_pbex(foundry_actor, web_id="id", timestamp=0)
+        inner = json.loads(next(iter(pbex["saves"].values())))
+        meta = json.loads(pbex["saveIDs"][0])
+        assert meta["classLevel"].endswith(str(inner["characterLevel"]))
+
+    def test_missing_xp_defaults_to_zero(self):
+        actor = {"name": "X", "items": [],
+                 "system": {"details": {"level": {"value": 1}}}}
+        save, _ = convert.build_save(actor, tables=({}, []))
+        assert save["experiencePoints"] == 0
+        assert save["characterLevel"] == 1
+
+
 class TestShape:
     def test_every_sample_key_present_with_same_type(self, foundry_actor, sample_inner_save):
         save, _ = convert.build_save(foundry_actor)

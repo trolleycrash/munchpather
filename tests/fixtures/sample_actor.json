@@ -4,6 +4,7 @@
   "system": {
     "details": {
       "level": { "value": 2 },
+      "xp": { "value": 750, "max": 1000 },
       "keyability": { "value": "cha" },
       "age": { "value": "20" },
       "gender": { "value": "Male" },

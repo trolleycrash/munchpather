@@ -31,6 +31,16 @@ def sample_pbex() -> dict:
 
 
 @pytest.fixture(scope="session")
+def pbex_schema() -> dict:
+    """Format contract (field names + JSON types) derived from real exports.
+
+    Contains no character data. Regenerate with the schema generator if the
+    Pathbuilder format changes.
+    """
+    return json.loads((FIXTURES / "pbex_schema.json").read_text())
+
+
+@pytest.fixture(scope="session")
 def sample_inner_save(sample_pbex) -> dict:
     """The first character save inside the sample .pbex, decoded."""
     first = next(iter(sample_pbex["saves"].values()))

@@ -5,3 +5,7 @@ __pycache__/
 
 # Generated converter output (root-level .pbex; tests/fixtures/*.pbex stays tracked)
 /*.pbex
+
+# Real personal data used only locally for mapping (never distribute)
+/fvtt-Actor-*.json
+pb.js

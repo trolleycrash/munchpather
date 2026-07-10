@@ -1,0 +1,190 @@
+{
+ "outer_fields": [
+  "customFiles",
+  "folders",
+  "portraits",
+  "saveIDs",
+  "saves"
+ ],
+ "inner_field_types": {
+  "age": [
+   "str"
+  ],
+  "ancestry": [
+   "str"
+  ],
+  "background": [
+   "str"
+  ],
+  "backgroundBoostLimitedSelection": [
+   "int"
+  ],
+  "booksLastChecked": [
+   "int"
+  ],
+  "characterLevel": [
+   "int"
+  ],
+  "characterName": [
+   "str"
+  ],
+  "classKeyAbility": [
+   "int"
+  ],
+  "className": [
+   "str"
+  ],
+  "classOptionalTrainedSkill": [
+   "str"
+  ],
+  "copper": [
+   "int"
+  ],
+  "deity": [
+   "str"
+  ],
+  "dialects": [
+   "list"
+  ],
+  "emailedBuildID": [
+   "int"
+  ],
+  "experiencePoints": [
+   "int"
+  ],
+  "gender": [
+   "str"
+  ],
+  "getBackgroundBoostFreeSelection": [
+   "int"
+  ],
+  "gold": [
+   "int"
+  ],
+  "hashMapAbilityBoosts": [
+   "dict"
+  ],
+  "hashMapAncestryFreeBoostSelections": [
+   "dict"
+  ],
+  "hashMapEquipmentContainers": [
+   "dict"
+  ],
+  "hashMapFeatSelections": [
+   "dict"
+  ],
+  "hashMapPlayerSpells": [
+   "dict"
+  ],
+  "hashMapSkillIncreases": [
+   "dict"
+  ],
+  "hashMapSpecialSelections": [
+   "dict"
+  ],
+  "hashMapTrainedOnlySkillChoices": [
+   "dict"
+  ],
+  "listDisabledRulebooks": [
+   "list"
+  ],
+  "listLanguages": [
+   "list"
+  ],
+  "listOptInBooks": [
+   "list"
+  ],
+  "listPlayerEquipment": [
+   "list"
+  ],
+  "listPlayerWeapons": [
+   "list"
+  ],
+  "listStowedPlayerArmor": [
+   "list"
+  ],
+  "playerArmor": [
+   "dict"
+  ],
+  "playerShieldNew": [
+   "dict"
+  ],
+  "remastered": [
+   "bool"
+  ],
+  "showOutdated": [
+   "bool"
+  ],
+  "showOutdatedSpells": [
+   "bool"
+  ],
+  "silver": [
+   "int"
+  ],
+  "webID": [
+   "str"
+  ]
+ },
+ "allowed_inner_fields": [
+  "abilityScoreOverrides",
+  "age",
+  "alignment",
+  "allowHalfHeritages",
+  "ancestry",
+  "background",
+  "backgroundBoostLimitedSelection",
+  "backgroundBoostThirdSelection",
+  "booksLastChecked",
+  "characterLevel",
+  "characterName",
+  "classDualOptionalTrainedSkill",
+  "classKeyAbility",
+  "className",
+  "classOptionalTrainedSkill",
+  "cloudStorage",
+  "copper",
+  "deity",
+  "dialects",
+  "dualClassKeyAbility",
+  "emailedBuildID",
+  "experiencePoints",
+  "gender",
+  "getBackgroundBoostFreeSelection",
+  "gold",
+  "googleFileID",
+  "hashMapAbilityBoosts",
+  "hashMapActiveConditions",
+  "hashMapActiveCustomBuffs",
+  "hashMapAncestryFreeBoostSelections",
+  "hashMapEquipmentContainers",
+  "hashMapFeatExtraSelections",
+  "hashMapFeatSelections",
+  "hashMapPlayerSpells",
+  "hashMapSkillIncreases",
+  "hashMapSpecialSelections",
+  "hashMapTrainedOnlySkillChoices",
+  "listCurrentlyInactiveBuffs",
+  "listCustomLores",
+  "listDisabledRulebooks",
+  "listLanguages",
+  "listOptInBooks",
+  "listPlayerEquipment",
+  "listPlayerFormula",
+  "listPlayerSiegeWeapon",
+  "listPlayerWeapons",
+  "listRituals",
+  "listStowedPlayerArmor",
+  "listStowedPlayerShields",
+  "notes",
+  "platinum",
+  "playerArmor",
+  "playerShieldNew",
+  "portraitFilename",
+  "remastered",
+  "showOutdated",
+  "showOutdatedSpells",
+  "silver",
+  "webID"
+ ],
+ "_source": "5 export(s) + app bundle export cluster"
+}
